@@ -1,8 +1,16 @@
-# Используем официальный nginx образ с лёгким Alpine Linux
-FROM nginx:alpine
+FROM node:18-alpine
 
-# Копируем собранные файлы React в папку nginx
-COPY . /usr/share/nginx/html
+# Устанавливаем рабочую директорию
+WORKDIR /app
 
-# Запускаем nginx в фоновом режиме
-CMD ["nginx", "-g", "daemon off;"]
+# Копируем статику внутрь контейнера
+COPY . .
+
+# Устанавливаем http-сервер
+RUN npm install -g serve
+
+# Указываем порт, на котором будет работать сервер
+EXPOSE 3000
+
+# Команда запуска
+CMD ["serve", "-s", ".", "-l", "3000"]
